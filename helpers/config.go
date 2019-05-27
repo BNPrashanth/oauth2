@@ -20,17 +20,9 @@ var (
 )
 
 /*
-InitializeLogger Function runs the functions needed to initialize logger in the application.
+InitializeViper Funtion initializes viper to read configuration and/or environment variables in the application.
 */
-func InitializeLogger() {
-	initializeViper()
-	initializeZapCustomLogger()
-}
-
-/*
-initializeViper Funtion initializes viper to read configuration and/or environment variables in the application.
-*/
-func initializeViper() {
+func InitializeViper() {
 	viper.SetConfigName("config")
 	viper.AddConfigPath(".")
 	viper.AutomaticEnv()
@@ -42,9 +34,9 @@ func initializeViper() {
 }
 
 /*
-initializeZapCustomLogger Funtion initializes a logger using uber-go/zap package in the application.
+InitializeZapCustomLogger Funtion initializes a logger using uber-go/zap package in the application.
 */
-func initializeZapCustomLogger() {
+func InitializeZapCustomLogger() {
 	conf := zap.Config{
 		Encoding:    "json",
 		Level:       zap.NewAtomicLevelAt(zapcore.InfoLevel),
