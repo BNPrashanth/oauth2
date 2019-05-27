@@ -14,40 +14,40 @@ import (
 )
 
 var (
-	oauthConf = &oauth2.Config{
+	oauthConfFb = &oauth2.Config{
 		ClientID:     "",
 		ClientSecret: "",
 		RedirectURL:  "http://localhost:9090/callback-fb",
 		Scopes:       []string{"public_profile"},
 		Endpoint:     facebook.Endpoint,
 	}
-	oauthStateString = ""
+	oauthStateStringFb = ""
 )
 
 /*
 InitializeOAuthFacebook Function
 */
 func InitializeOAuthFacebook() {
-	oauthConf.ClientID = viper.GetString("facebook.clientID")
-	oauthConf.ClientSecret = viper.GetString("facebook.clentSecret")
-	oauthStateString = viper.GetString("oauthStateString")
+	oauthConfFb.ClientID = viper.GetString("facebook.clientID")
+	oauthConfFb.ClientSecret = viper.GetString("facebook.clentSecret")
+	oauthStateStringFb = viper.GetString("oauthStateString")
 }
 
 /*
 HandleFacebookLogin Function
 */
 func HandleFacebookLogin(w http.ResponseWriter, r *http.Request) {
-	URL, err := url.Parse(oauthConf.Endpoint.AuthURL)
+	URL, err := url.Parse(oauthConfFb.Endpoint.AuthURL)
 	if err != nil {
 		h.Log.Error("Parse: " + err.Error())
 	}
 	h.Log.Info(URL.String())
 	parameters := url.Values{}
-	parameters.Add("client_id", oauthConf.ClientID)
-	parameters.Add("scope", strings.Join(oauthConf.Scopes, " "))
-	parameters.Add("redirect_uri", oauthConf.RedirectURL)
+	parameters.Add("client_id", oauthConfFb.ClientID)
+	parameters.Add("scope", strings.Join(oauthConfFb.Scopes, " "))
+	parameters.Add("redirect_uri", oauthConfFb.RedirectURL)
 	parameters.Add("response_type", "code")
-	parameters.Add("state", oauthStateString)
+	parameters.Add("state", oauthStateStringFb)
 	URL.RawQuery = parameters.Encode()
 	url := URL.String()
 	h.Log.Info(url)
@@ -62,8 +62,8 @@ func CallBackFromFacebook(w http.ResponseWriter, r *http.Request) {
 
 	state := r.FormValue("state")
 	h.Log.Info(state)
-	if state != oauthStateString {
-		h.Log.Info("invalid oauth state, expected " + oauthStateString + ", got " + state + "\n")
+	if state != oauthStateStringFb {
+		h.Log.Info("invalid oauth state, expected " + oauthStateStringFb + ", got " + state + "\n")
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 		return
 	}
@@ -81,9 +81,9 @@ func CallBackFromFacebook(w http.ResponseWriter, r *http.Request) {
 		// User has denied access..
 		// http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
 	} else {
-		token, err := oauthConf.Exchange(oauth2.NoContext, code)
+		token, err := oauthConfFb.Exchange(oauth2.NoContext, code)
 		if err != nil {
-			h.Log.Error("oauthConf.Exchange() failed with " + err.Error() + "\n")
+			h.Log.Error("oauthConfFb.Exchange() failed with " + err.Error() + "\n")
 			return
 		}
 		h.Log.Info("TOKEN>> AccessToken>> " + token.AccessToken)
