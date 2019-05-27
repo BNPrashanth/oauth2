@@ -14,10 +14,13 @@ func main() {
 	h.InitializeZapCustomLogger()
 
 	s.InitializeOAuthFacebook()
+	s.InitializeOAuthLinkedin()
 
 	http.HandleFunc("/", handleMain)
 	http.HandleFunc("/login-fb", s.HandleFacebookLogin)
 	http.HandleFunc("/callback-fb", s.CallBackFromFacebook)
+	http.HandleFunc("/login-ln", s.HandleLinkedinLogin)
+	http.HandleFunc("/callback-ln", s.CallBackFromLinkedin)
 	h.Log.Info("Started running on http://localhost:" + viper.GetString("port"))
 	log.Fatal(http.ListenAndServe(":"+viper.GetString("port"), nil))
 

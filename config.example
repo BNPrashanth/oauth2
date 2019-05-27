@@ -5,3 +5,7 @@ oauthStateString: "thisshouldberandom"
 facebook:
   clientID: "facebook client id"
   clentSecret: "facebook client secret"
+
+linkedin:
+  clientID: "linkedin client id"
+  clentSecret: "linkedin client secret"

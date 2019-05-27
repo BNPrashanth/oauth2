@@ -15,6 +15,7 @@ const IndexPage = `
 		</p>
 		<ul>
 			<li><a href="/login-fb">Facebook</a></li>
+			<li><a href="/login-ln">Linkedin</a></li>
 		</ul>
 	</body>
 </html>
